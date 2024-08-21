@@ -6,7 +6,7 @@ import argparse
 
 Usage = \
 (
-"Convert Visual Studio .vcxproj file in current directory to Makefile and run make."
+"Convert Visual Studio .vcxproj file in current directory to Makefile, generate gitver.txt with current commit hash, and run make."
 )
 
 AP = argparse.ArgumentParser(description = Usage)
@@ -14,7 +14,7 @@ AP = argparse.ArgumentParser(description = Usage)
 # Value opts
 AP.add_argument("--std", required=False, help="C++ standard option for GCC, e.g. c++11 or c++17 (default none)")
 AP.add_argument("--cppcompiler", required=False, default="g++", help="C++ compiler command name default g++)")
-AP.add_argument("--ccompiler", required=False, default="gcc", help="C++ compiler command name default gcc)")
+AP.add_argument("--ccompiler", required=False, default="gcc", help="C compiler command name default gcc)")
 
 # Flag opts
 AP.add_argument("--debug", required=False, action='store_true', help="Debug build")
