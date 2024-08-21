@@ -12,7 +12,9 @@ Usage = \
 AP = argparse.ArgumentParser(description = Usage)
 
 # Value opts
-AP.add_argument("--std", required=False, help="Don't strip symbols (default if --debug or --symbols)")
+AP.add_argument("--std", required=False, help="C++ standard option for GCC, e.g. c++11 or c++17 (default none)")
+AP.add_argument("--cppcompiler", required=False, default="g++", help="C++ compiler command name default g++)")
+AP.add_argument("--ccompiler", required=False, default="gcc", help="C++ compiler command name default gcc)")
 
 # Flag opts
 AP.add_argument("--debug", required=False, action='store_true', help="Debug build")
@@ -25,6 +27,8 @@ AP.add_argument("--nostrip", required=False, action='store_true', help="Don't st
 Args = AP.parse_args()
 debug = Args.debug
 std = Args.std
+cppcompiler = Args.cppcompiler
+ccompiler = Args.ccompiler
 nostrip = debug or Args.symbols
 symbols = debug or Args.symbols
 
@@ -46,8 +50,7 @@ compiler_opts = " -ffast-math -march=native"
 linker_opts = " -ffast-math -march=native"
 
 if std:
-    assert std == "11" or std == "17"
-    compiler_opts += " --std=c++" + std
+    compiler_opts += " --std=" + std
 
 if debug:
     compiler_opts += " -O0 -DDEBUG"
@@ -133,12 +136,12 @@ with open("Makefile", "w") as f:
 
     if CNames:
         Out("")
-        Out("CC = gcc")
+        Out("CC = " + ccompiler)
         Out("CFLAGS := $(CFLAGS) " + compiler_opts)
 
     if CXXNames:
         Out("")
-        Out("CXX = g++")
+        Out("CXX = " + cppcompiler)
         Out("CXXFLAGS := $(CFLAGS) " + compiler_opts)
 
     Out("")
