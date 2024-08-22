@@ -23,9 +23,11 @@ AP.add_argument("--pthread", required=False, action='store_true', help="Requires
 AP.add_argument("--lrt", required=False, action='store_true', help="Requires lrt")
 AP.add_argument("--symbols", required=False, action='store_true', help="Debug symbols (default if --debug)")
 AP.add_argument("--nostrip", required=False, action='store_true', help="Don't strip symbols (default if --debug or --symbols)")
+AP.add_argument("--nomake", required=False, action='store_true', help="Generate Makefile only, don't run make")
 
 Args = AP.parse_args()
 debug = Args.debug
+nomake = Args.nomake
 std = Args.std
 cppcompiler = Args.cppcompiler
 ccompiler = Args.ccompiler
@@ -201,6 +203,8 @@ with open("Makefile", "w") as f:
         Out("	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<")
 
 sys.stderr.write("Makefile done.\n")
+if nomake:
+    sys.exit(0)
 
 rc = os.system("make 2> make.stderr | tee make.stdout")
 if rc != 0:
