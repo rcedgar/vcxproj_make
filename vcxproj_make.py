@@ -207,8 +207,8 @@ if nomake:
     sys.exit(0)
 
 rc = os.system("make 2> make.stderr | tee make.stdout")
+os.system("tail make.stderr")
 if rc != 0:
-    os.system("tail make.stderr")
     sys.stderr.write("\n\nERROR -- make failed, see make.stderr\n\n")
     sys.exit(1)
 sys.stderr.write("make done.\n")
