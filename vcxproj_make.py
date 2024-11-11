@@ -21,6 +21,7 @@ AP.add_argument("--debug", required=False, action='store_true', help="Debug buil
 AP.add_argument("--openmp", required=False, action='store_true', help="Requires OMP")
 AP.add_argument("--pthread", required=False, action='store_true', help="Requires pthread")
 AP.add_argument("--lrt", required=False, action='store_true', help="Requires lrt")
+AP.add_argument("--nonative", required=False, action='store_true', help="Don't use -march=native (for OSX M1)")
 AP.add_argument("--symbols", required=False, action='store_true', help="Debug symbols (default if --debug)")
 AP.add_argument("--nostrip", required=False, action='store_true', help="Don't strip symbols (default if --debug or --symbols)")
 AP.add_argument("--nomake", required=False, action='store_true', help="Generate Makefile only, don't run make")
@@ -48,8 +49,14 @@ if ProjFileName is None:
 binary = ProjFileName.replace(".vcxproj", "")
 sys.stderr.write("binary=" + binary + "\n")
 
-compiler_opts = " -ffast-math -march=native"
-linker_opts = " -ffast-math -march=native"
+# compiler_opts = " -ffast-math -march=native"
+# linker_opts = " -ffast-math -march=native"
+
+compiler_opts = " -ffast-math"
+linker_opts = " -ffast-math"
+if not Args.nonative:
+    compiler_opts += " -march=native"
+    linker_opts += " -march=native"
 
 if std:
     compiler_opts += " --std=" + std
