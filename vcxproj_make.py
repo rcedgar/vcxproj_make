@@ -146,12 +146,12 @@ with open("Makefile", "w") as f:
     if CNames:
         Out("")
         Out("CC = " + ccompiler)
-        Out("CFLAGS := $(CFLAGS) " + compiler_opts)
+        Out("CFLAGS := " + compiler_opts)
 
     if CXXNames:
         Out("")
         Out("CXX = " + cppcompiler)
-        Out("CXXFLAGS := $(CFLAGS) " + compiler_opts)
+        Out("CXXFLAGS := " + compiler_opts)
 
     Out("")
     Out("UNAME_S := $(shell uname -s)")
