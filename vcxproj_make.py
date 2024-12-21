@@ -24,7 +24,7 @@ AP.add_argument("--lrt", required=False, action='store_true', help="Requires lrt
 AP.add_argument("--nonative", required=False, action='store_true', help="Don't use -march=native (for OSX M1)")
 AP.add_argument("--symbols", required=False, action='store_true', help="Debug symbols (default if --debug)")
 AP.add_argument("--nostrip", required=False, action='store_true', help="Don't strip symbols (default if --debug or --symbols)")
-AP.add_argument("--noststatic", required=False, action='store_true', help="Don't do static linking")
+AP.add_argument("--nostatic", required=False, action='store_true', help="Don't do static linking")
 AP.add_argument("--nomake", required=False, action='store_true', help="Generate Makefile only, don't run make")
 
 Args = AP.parse_args()
