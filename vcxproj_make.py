@@ -36,7 +36,7 @@ ccompiler = Args.ccompiler
 nostrip = debug or Args.symbols
 symbols = debug or Args.symbols
 static = True
-if not Args.nostatic is None:
+if Args.nostatic:
     static = False
 
 ProjFileName = None
