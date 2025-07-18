@@ -59,8 +59,8 @@ if ProjFileName is None:
 binary = ProjFileName.replace(".vcxproj", "")
 sys.stderr.write("binary=" + binary + "\n")
 
-compiler_opts = " -ffast-math"
-linker_opts = " -ffast-math"
+compiler_opts = " -flto -ffast-math"
+linker_opts = " -flto -ffast-math"
 if not Args.nonative:
 	compiler_opts += " -march=native"
 	linker_opts += " -march=native"
