@@ -20,6 +20,7 @@ AP.add_argument("--deletes", required=False, help="List of source files to omit 
 # Flag opts
 AP.add_argument("--debug", required=False, action='store_true', help="Debug build")
 AP.add_argument("--openmp", required=False, action='store_true', help="Requires OMP")
+AP.add_argument("--santhread", required=False, action='store_true', help="Set -fsanitize=thread")
 AP.add_argument("--pthread", required=False, action='store_true', help="Requires pthread")
 AP.add_argument("--lrt", required=False, action='store_true', help="Requires lrt")
 AP.add_argument("--nonative", required=False, action='store_true', help="Don't use -march=native (for OSX M1)")
@@ -38,7 +39,7 @@ ccompiler = Args.ccompiler
 nostrip = debug or Args.symbols
 symbols = debug or Args.symbols
 static = True
-if Args.nostatic:
+if Args.nostatic or Args.santhread:
 	static = False
 
 deletes = []
@@ -64,6 +65,10 @@ linker_opts = " -flto -ffast-math"
 if not Args.nonative:
 	compiler_opts += " -march=native"
 	linker_opts += " -march=native"
+
+if Args.santhread:
+	compiler_opts += " -fsanitize=thread"
+	linker_opts += " -fsanitize=thread"
 
 if std:
 	compiler_opts += " --std=" + std
