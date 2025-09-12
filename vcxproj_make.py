@@ -13,6 +13,7 @@ AP = argparse.ArgumentParser(description = Usage)
 
 # Value opts
 AP.add_argument("--std", required=False, help="C++ standard option for GCC, e.g. c++11 or c++17 (default none)")
+AP.add_argument("--deletes", required=False, help="source filenames to delete separated by +")
 AP.add_argument("--cppcompiler", required=False, default="g++", help="C++ compiler command name default g++)")
 AP.add_argument("--ccompiler", required=False, default="gcc", help="C compiler command name default gcc)")
 AP.add_argument("--binary", help="Binary filename (default project name")
