@@ -278,12 +278,12 @@ with open("Makefile", "w") as f:
 	if CNames:
 		Out("")
 		Out("$(OBJDIR)/%.o : %.c $(HDRS)")
-		Out("	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<")
+		Out("	$(CC) $(CFLAGS) -c -o $@ $<")
 
 	if CPPNames:
 		Out("")
 		Out("$(OBJDIR)/%.o : %.cpp $(HDRS)")
-		Out("	$(CPP) $(CPPFLAGS) $(CPPFLAGS) -c -o $@ $<")
+		Out("	$(CPP) $(CPPFLAGS) -c -o $@ $<")
 
 sys.stderr.write("Makefile done.\n")
 if nomake:
