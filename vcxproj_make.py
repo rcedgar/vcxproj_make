@@ -63,7 +63,7 @@ if ProjFileName is None:
 if Args.binary is None:
 	binary = ProjFileName.replace(".vcxproj", "")
 else:
-	binary = Args.binay
+	binary = Args.binary
 sys.stderr.write("binary=" + binary + "\n")
 
 compiler_opts = " -flto -ffast-math"
