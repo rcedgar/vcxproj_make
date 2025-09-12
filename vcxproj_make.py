@@ -15,7 +15,7 @@ AP = argparse.ArgumentParser(description = Usage)
 AP.add_argument("--std", required=False, help="C++ standard option for GCC, e.g. c++11 or c++17 (default none)")
 AP.add_argument("--cppcompiler", required=False, default="g++", help="C++ compiler command name default g++)")
 AP.add_argument("--ccompiler", required=False, default="gcc", help="C compiler command name default gcc)")
-AP.add_argument("--deletes", required=False, help="List of source files to omit separated by '+'")
+AP.add_argument("--binary", help="Binary filename (default project name")
 
 # Flag opts
 AP.add_argument("--debug", required=False, action='store_true', help="Debug build")
@@ -59,7 +59,10 @@ if ProjFileName is None:
 	sys.stderr.write("\nProject file not found in current directory\n")
 	sys.exit(1)
 
-binary = ProjFileName.replace(".vcxproj", "")
+if Args.binary is None:
+	binary = ProjFileName.replace(".vcxproj", "")
+else:
+	binary = Args.binay
 sys.stderr.write("binary=" + binary + "\n")
 
 compiler_opts = " -flto -ffast-math"
