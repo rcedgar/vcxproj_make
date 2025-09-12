@@ -19,6 +19,7 @@ AP.add_argument("--deletes", required=False, help="List of source files to omit 
 
 # Flag opts
 AP.add_argument("--debug", required=False, action='store_true', help="Debug build")
+AP.add_argument("--profile", required=False, action='store_true', help="Profile build")
 AP.add_argument("--openmp", required=False, action='store_true', help="Requires OMP")
 AP.add_argument("--santhread", required=False, action='store_true', help="Set -fsanitize=thread")
 AP.add_argument("--pthread", required=False, action='store_true', help="Requires pthread")
@@ -32,12 +33,13 @@ AP.add_argument("--bash", required=False, action='store_true', help="Generate ma
 
 Args = AP.parse_args()
 debug = Args.debug
+profile = Args.profile
 nomake = Args.nomake
 std = Args.std
 cppcompiler = Args.cppcompiler
 ccompiler = Args.ccompiler
-nostrip = debug or Args.symbols
-symbols = debug or Args.symbols
+nostrip = profile or debug or Args.symbols
+symbols = profile or debug or Args.symbols
 static = True
 if Args.nostatic or Args.santhread:
 	static = False
@@ -69,6 +71,10 @@ if not Args.nonative:
 if Args.santhread:
 	compiler_opts += " -fsanitize=thread"
 	linker_opts += " -fsanitize=thread"
+
+if Args.profile:
+	compiler_opts += " -fno-omit-frame-pointer"
+	linker_opts += " -fno-omit-frame-pointer"
 
 if std:
 	compiler_opts += " --std=" + std
