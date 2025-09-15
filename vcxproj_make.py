@@ -64,6 +64,9 @@ if Args.binary is None:
 	binary = ProjFileName.replace(".vcxproj", "")
 else:
 	binary = Args.binary
+	if binary.find('/') >= 0:
+		sys.stderr.write("ERROR path name not allowed for --binary")
+		sys.exit(0)
 sys.stderr.write("binary=" + binary + "\n")
 
 compiler_opts = " -flto -ffast-math"
@@ -121,11 +124,6 @@ sys.stderr.write("clean done.\n")
 OBJDIR = "o"
 BINDIR = "../bin"
 
-# Fields = ProjFileName.split("/")
-# n = len(Fields)
-# Name = Fields[n-1]
-# Fields = Name.split(".")
-# binary = Fields[0]
 
 CPPNames = []
 CNames = []
