@@ -43,7 +43,7 @@ ccompiler = Args.ccompiler
 nostrip = profile or debug or Args.symbols
 symbols = profile or debug or Args.symbols
 static = True
-if Args.nostatic or Args.santhread:
+if Args.nostatic or Args.santhread or Args.sanaddr:
 	static = False
 
 deletes = []
@@ -198,7 +198,8 @@ if Args.bash:
 			f.write("	o/%s.o \\\n" % CName)
 		for CPPName in CPPNames:
 			f.write("	o/%s.o \\\n" % CPPName)
-		f.write("	-static \\\n")
+		if static:
+			f.write("	-static \\\n")
 		f.write("	-o ../bin/%s\n" % binary)
 		f.write("ls -lh ../bin/%s\n" % binary)
 	os.system("chmod +x " + bashfn)
