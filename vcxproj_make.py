@@ -23,6 +23,7 @@ AP.add_argument("--debug", required=False, action='store_true', help="Debug buil
 AP.add_argument("--profile", required=False, action='store_true', help="Profile build")
 AP.add_argument("--openmp", required=False, action='store_true', help="Requires OMP")
 AP.add_argument("--santhread", required=False, action='store_true', help="Set -fsanitize=thread")
+AP.add_argument("--sanaddr", required=False, action='store_true', help="Set -fsanitize=address")
 AP.add_argument("--pthread", required=False, action='store_true', help="Requires pthread")
 AP.add_argument("--lrt", required=False, action='store_true', help="Requires lrt")
 AP.add_argument("--nonative", required=False, action='store_true', help="Don't use -march=native (for OSX M1)")
@@ -78,6 +79,10 @@ if not Args.nonative:
 if Args.santhread:
 	compiler_opts += " -fsanitize=thread"
 	linker_opts += " -fsanitize=thread"
+
+if Args.sanaddr:
+	compiler_opts += " -fsanitize=address"
+	linker_opts += " -fsanitize=address"
 
 if Args.profile:
 	compiler_opts += " -fno-omit-frame-pointer"
