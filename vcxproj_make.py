@@ -45,6 +45,7 @@ symbols = profile or debug or Args.symbols
 static = True
 if Args.nostatic or Args.santhread or Args.sanaddr:
 	static = False
+	symbols = True
 
 deletes = []
 if not Args.deletes is None:
