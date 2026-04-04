@@ -32,6 +32,7 @@ AP.add_argument("--nostrip", required=False, action='store_true', help="Don't st
 AP.add_argument("--nostatic", required=False, action='store_true', help="Don't do static linking")
 AP.add_argument("--nomake", required=False, action='store_true', help="Generate Makefile/make.bash only, don't run make")
 AP.add_argument("--bash", required=False, action='store_true', help="Generate make.bash (default Makefile)")
+AP.add_argument("--git_hash", required=False, action='store_true', help="Generate git_hash.h (default gitver.txt)")
 
 Args = AP.parse_args()
 debug = Args.debug
@@ -120,6 +121,11 @@ if rc != 0:
 	sys.stderr.write("\n\nERROR -- failed to generate gitver.txt\n\n")
 	sys.exit(1)
 sys.stderr.write("gitver.txt done.\n")
+if Args.git_hash:
+	rc = os.system(r'h=`cat gitver.txt`; echo "#define GIT_HASH $h" > git_hash.h ; rm -f gitver.txt')
+	if rc != 0:
+		sys.stderr.write("\n\nERROR -- failed to generate gitver.txt\n\n")
+		sys.exit(1)
 
 rc = os.system(r'rm -rf o/ ../bin/%s*' % binary)
 if rc != 0:
