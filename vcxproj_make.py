@@ -305,7 +305,7 @@ if nomake:
 	sys.exit(0)
 
 sys.stderr.write("Running make...\n")
-rc = os.system("make -j32 2> make.stderr | tee make.stdout")
+rc = os.system("make -j64 2> make.stderr | tee make.stdout")
 sys.stderr.write("make done rc=%d\n" % rc)
 os.system("tail make.stderr")
 if rc != 0:
