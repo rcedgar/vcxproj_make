@@ -16,7 +16,7 @@ AP.add_argument("--std", required=False, help="C++ standard option for GCC, e.g.
 AP.add_argument("--deletes", required=False, help="source filenames to delete separated by +")
 AP.add_argument("--cppcompiler", required=False, default="g++", help="C++ compiler command name default g++)")
 AP.add_argument("--ccompiler", required=False, default="gcc", help="C compiler command name default gcc)")
-AP.add_argument("--binary", help="Binary filename (default project name")
+AP.add_argument("--binary", help="Binary filename (path not allowed, default project name")
 
 # Flag opts
 AP.add_argument("--debug", required=False, action='store_true', help="Debug build")
@@ -33,6 +33,7 @@ AP.add_argument("--nostatic", required=False, action='store_true', help="Don't d
 AP.add_argument("--nomake", required=False, action='store_true', help="Generate Makefile/make.bash only, don't run make")
 AP.add_argument("--bash", required=False, action='store_true', help="Generate make.bash (default Makefile)")
 AP.add_argument("--git_hash", required=False, action='store_true', help="Generate git_hash.h (default gitver.txt)")
+AP.add_argument("--ec2", required=False, action='store_true', help="EC2 compatible -march=x86-64-v3 -mtune=native")
 
 Args = AP.parse_args()
 debug = Args.debug
@@ -74,7 +75,11 @@ sys.stderr.write("binary=" + binary + "\n")
 
 compiler_opts = " -flto -ffast-math"
 linker_opts = " -flto -ffast-math"
-if not Args.nonative:
+
+if Args.ec2:
+	compiler_opts += " -march=x86-64-v3 -mtune=native"
+	linker_opts += " -march=x86-64-v3 -mtune=native"
+elif not Args.nonative:
 	compiler_opts += " -march=native"
 	linker_opts += " -march=native"
 
@@ -192,9 +197,9 @@ if Args.bash:
 			f.write("done\n")
 
 		f.write("echo '#!/bin/bash -x' > o/compile_c.bash\n")
-		f.write("echo 'ccache %s -c %s $1.c -o o/$1.o' >> o/compile_c.bash\n" % (ccompiler,  compiler_opts))
+		f.write("echo '%s -c %s $1.c -o o/$1.o' >> o/compile_c.bash\n" % (ccompiler,  compiler_opts))
 		f.write("echo '#!/bin/bash -x' > o/compile_cpp.bash\n")
-		f.write("echo 'ccache %s -c %s $1.cpp -o o/$1.o' >> o/compile_cpp.bash\n" % (cppcompiler,  compiler_opts))
+		f.write("echo '%s -c %s $1.cpp -o o/$1.o' >> o/compile_cpp.bash\n" % (cppcompiler,  compiler_opts))
 		f.write("chmod +x o/compile_c.bash  o/compile_cpp.bash\n")
 		f.write("cat o/cnames.tmp \\\n")
 		f.write("	| parallel o/compile_c.bash\n")
