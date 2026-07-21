@@ -34,6 +34,9 @@ AP.add_argument("--nomake", required=False, action='store_true', help="Generate 
 AP.add_argument("--bash", required=False, action='store_true', help="Generate make.bash (default Makefile)")
 AP.add_argument("--git_hash", required=False, action='store_true', help="Generate git_hash.h (default gitver.txt)")
 AP.add_argument("--ec2", required=False, action='store_true', help="EC2 compatible -march=x86-64-v3 -mtune=native")
+AP.add_argument("--x86-64-v3", required=False, action='store_true', help="-march=x86-64-v3")
+
+# -march=x86-64-v3
 
 Args = AP.parse_args()
 debug = Args.debug
@@ -79,6 +82,9 @@ linker_opts = " -flto -ffast-math"
 if Args.ec2:
 	compiler_opts += " -march=x86-64-v3 -mtune=native"
 	linker_opts += " -march=x86-64-v3 -mtune=native"
+elif Args.x86_64_v3:
+	compiler_opts += " -march=x86-64-v3"
+	linker_opts += " -march=x86-64-v3"
 elif not Args.nonative:
 	compiler_opts += " -march=native"
 	linker_opts += " -march=native"
