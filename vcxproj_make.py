@@ -11,6 +11,13 @@ Usage = \
 
 AP = argparse.ArgumentParser(description = Usage)
 
+x64_archs = [ \
+	"x86-64",		# SSE, SSE2	Baseline x86-64 (~2003)
+	"x86-64-v2",	# Nehalem / Jaguar (~2009)
+	"x86-64-v3",	# AVX, AVX2, FMA, F16C, BMI1, BMI2	Haswell / Excavator (~2013–2015)
+	"x86-64-v4",	# AVX-512 (F, BW, CD, DQ, VL)	Skylake-X / Zen 4 (~2017+)
+	]
+
 # Value opts
 AP.add_argument("--std", required=False, help="C++ standard option for GCC, e.g. c++11 or c++17 (default none)")
 AP.add_argument("--deletes", required=False, help="source filenames to delete separated by +")
@@ -34,7 +41,7 @@ AP.add_argument("--nomake", required=False, action='store_true', help="Generate 
 AP.add_argument("--bash", required=False, action='store_true', help="Generate make.bash (default Makefile)")
 AP.add_argument("--git_hash", required=False, action='store_true', help="Generate git_hash.h (default gitver.txt)")
 AP.add_argument("--ec2", required=False, action='store_true', help="EC2 compatible -march=x86-64-v3 -mtune=native")
-AP.add_argument("--x86-64-v3", required=False, action='store_true', help="-march=x86-64-v3")
+AP.add_argument("--arch", required=False, choices=x64_archs, help="march=x64_xxx")
 
 # -march=x86-64-v3
 
@@ -79,12 +86,12 @@ sys.stderr.write("binary=" + binary + "\n")
 compiler_opts = " -flto -ffast-math"
 linker_opts = " -flto -ffast-math"
 
-if Args.ec2:
-	compiler_opts += " -march=x86-64-v3 -mtune=native"
-	linker_opts += " -march=x86-64-v3 -mtune=native"
-elif Args.x86_64_v3:
-	compiler_opts += " -march=x86-64-v3"
-	linker_opts += " -march=x86-64-v3"
+if Args.arch:
+	compiler_opts += " -march=" + Args.arch + " -mtune=intel"
+	linker_opts += " -march=" + Args.arch + " -mtune=intel"
+elif Args.ec2:
+	compiler_opts += " -march=x86-64-v3 -mtune=intel"
+	linker_opts += " -march=x86-64-v3 -mtune=intel"
 elif not Args.nonative:
 	compiler_opts += " -march=native"
 	linker_opts += " -march=native"
@@ -132,6 +139,7 @@ if rc != 0:
 	sys.stderr.write("\n\nERROR -- failed to generate gitver.txt\n\n")
 	sys.exit(1)
 sys.stderr.write("gitver.txt done.\n")
+os.system(r"ls -lh gitver.txt")
 if Args.git_hash:
 	rc = os.system(r'h=`cat gitver.txt`; echo "#define GIT_HASH $h" > git_hash.h ; rm -f gitver.txt')
 	if rc != 0:
@@ -146,7 +154,6 @@ sys.stderr.write("clean done.\n")
 
 OBJDIR = "o"
 BINDIR = "../bin"
-
 
 CPPNames = []
 CNames = []
